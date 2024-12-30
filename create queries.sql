@@ -16,8 +16,7 @@ CREATE TABLE Topics (
     name VARCHAR(100),
     created_by VARCHAR(100), 
     created_at VARCHAR(50),
-    FOREIGN KEY (created_by) REFERENCES users(user_id) 
-    ON UPDATE CASCADE
+    FOREIGN KEY (created_by) REFERENCES users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -28,8 +27,8 @@ CREATE TABLE UserTopics (
     created_by VARCHAR(100), 
     created_at VARCHAR(50),
     PRIMARY KEY (user_id, topic_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE
 );	
 
 CREATE TABLE SubTopics (
@@ -37,8 +36,9 @@ CREATE TABLE SubTopics (
     name VARCHAR(100),
     topic_id VARCHAR(20),
     created_by VARCHAR(100),
-    created_at VARCHAR(20),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id)
+    created_at VARCHAR(50),
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES Users(user_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE LearningMaterials (
@@ -46,8 +46,8 @@ CREATE TABLE LearningMaterials (
     subtopic_id VARCHAR(20),
     content TEXT,
     PRIMARY KEY (topic_id,subtopic_id),
-    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id)
+    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Practices (
@@ -55,8 +55,8 @@ CREATE TABLE Practices (
     topic_id VARCHAR(20),
     subtopic_id VARCHAR(20),
     title VARCHAR(20),
-    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id)
+    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
     
@@ -66,8 +66,8 @@ CREATE TABLE Tests (
     topic_id VARCHAR(20),
     subtopic_id VARCHAR(20),
     title VARCHAR(20),
-    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id)
+    FOREIGN KEY (subtopic_id) REFERENCES subtopics(subtopic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -77,7 +77,7 @@ CREATE TABLE PracticeQuestions (
     question VARCHAR(100),
     correct_option INT,
     explanation TEXT,
-    FOREIGN KEY (title_id) REFERENCES Practices(title_id)
+    FOREIGN KEY (title_id) REFERENCES Practices(title_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE TestQuestions (
@@ -86,7 +86,7 @@ CREATE TABLE TestQuestions (
     question VARCHAR(100),
     correct_option INT,
     explanation TEXT,
-    FOREIGN KEY (title_id) REFERENCES Tests(title_id)
+    FOREIGN KEY (title_id) REFERENCES Tests(title_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE PracticeOptions (
@@ -96,7 +96,7 @@ CREATE TABLE PracticeOptions (
     option2 VARCHAR(100),
     option3 VARCHAR(100),
     option4 VARCHAR(100),
-    FOREIGN KEY (question_id) REFERENCES PracticeQuestions(question_id)
+    FOREIGN KEY (question_id) REFERENCES PracticeQuestions(question_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE TestOptions (
@@ -106,7 +106,7 @@ CREATE TABLE TestOptions (
     option2 VARCHAR(100),
     option3 VARCHAR(100),
     option4 VARCHAR(100),
-    FOREIGN KEY (question_id) REFERENCES TestQuestions(question_id)
+    FOREIGN KEY (question_id) REFERENCES TestQuestions(question_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE TestHistory (
@@ -117,20 +117,20 @@ CREATE TABLE TestHistory (
     title_id VARCHAR(20),
     type VARCHAR(20),
     title VARCHAR(20),
-    start_at VARCHAR(20),
-    finished_at VARCHAR(20),
+    start_at VARCHAR(50),
+    finished_at VARCHAR(50),
     status VARCHAR(20),
     score INT,
     total_question INT,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id),
-    FOREIGN KEY (subtopic_id) REFERENCES SubTopics(subtopic_id),
-    FOREIGN KEY (title_id) REFERENCES Tests(title_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (topic_id) REFERENCES Topics(topic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (subtopic_id) REFERENCES SubTopics(subtopic_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (title_id) REFERENCES Tests(title_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Reports (
     report_id INT PRIMARY KEY,
     test_id VARCHAR(20),
     report JSON,
-    FOREIGN KEY (test_id) REFERENCES TestHistory(test_id)
+    FOREIGN KEY (test_id) REFERENCES TestHistory(test_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
